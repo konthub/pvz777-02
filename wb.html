@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Видеоинструкции</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1830;
+      --panel:rgba(10,19,36,.94);
+      --panel2:rgba(12,24,48,.98);
+      --text:#e8f0ff;
+      --muted:#9fb0d0;
+      --line:rgba(126,163,255,.18);
+      --accent:#5cc8ff;
+      --accent2:#6dd3ff;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      color:var(--text);
+      font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(900px 500px at -5% 10%, rgba(31,127,255,.20), transparent 55%),
+        radial-gradient(900px 500px at 105% 80%, rgba(92,200,255,.18), transparent 55%),
+        linear-gradient(180deg, #06101c 0%, #081224 45%, #07101b 100%);
+      min-height:100vh;
+    }
+    body.modal-open{overflow:hidden}
+    .page{max-width:1600px;margin:0 auto;padding:18px}
+    .shell{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+    .side,.main{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .side{padding:16px;position:sticky;top:16px}
+    .breadcrumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:14px;margin-bottom:10px}
+    .breadcrumbs a{color:var(--text);text-decoration:none}
+    .page-title{margin:0 0 10px;font-size:30px;line-height:1.12}
+    .page-intro{margin:0 0 14px;color:var(--muted)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px}
+    .mini-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px;background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);text-decoration:none;font-weight:700}
+    .main{padding:16px}
+    .content-stack{display:grid;gap:16px}
+    .content-block{border:1px solid rgba(126,163,255,.16);border-radius:20px;padding:16px;background:rgba(255,255,255,.02)}
+    .block-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+    .block-index{color:var(--muted);font-size:13px;margin-bottom:6px}
+    .content-block h2{margin:0;font-size:24px;line-height:1.15}
+    .video-caption{font-size:14px;color:var(--muted);margin-bottom:10px}
+    .video-shell,.embed-shell,.external-video-card{background:#08111f;border:1px solid rgba(126,163,255,.12);border-radius:18px;overflow:hidden}
+    .video-shell video,.video-shell iframe,.embed-shell iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#000}
+    .embed-shell iframe{min-height:420px}
+    .external-video-card{padding:24px}
+    .external-video-title{font-size:18px;font-weight:700;margin-bottom:8px}
+    .open-link-btn,.pdf-link{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 16px;border-radius:14px;background:#12213d;border:1px solid rgba(126,163,255,.18);color:var(--text);text-decoration:none;font-weight:700}
+    .instruction-box{margin-top:14px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,.56);border:1px solid rgba(126,163,255,.12)}
+    .media-section{margin-top:16px}
+    .section-mini-title{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:10px}
+    .image-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .image-card{padding:0;border:0;background:#08111f;border-radius:18px;overflow:hidden;cursor:pointer;display:block}
+    .image-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#0a1120}
+    .pdf-list{display:flex;flex-wrap:wrap;gap:10px}
+    .empty-card{padding:20px;border-radius:18px;background:#08111f;border:1px dashed rgba(126,163,255,.18);color:var(--muted)}
+    .image-modal{position:fixed;inset:0;background:rgba(2,7,16,.84);display:none;align-items:center;justify-content:center;padding:22px;z-index:9999}
+    .image-modal.is-open{display:flex}
+    .image-modal-box{position:relative;max-width:min(96vw,1500px);max-height:92vh;width:100%;display:flex;align-items:center;justify-content:center}
+    .image-modal img{max-width:100%;max-height:92vh;border-radius:18px;background:#091221}
+    .image-close{position:absolute;top:-10px;right:-10px;min-width:44px;min-height:44px;border:0;border-radius:999px;background:#12213d;color:#fff;font-size:26px;cursor:pointer}
+    @media (max-width:1100px){
+      .shell{grid-template-columns:1fr}
+      .side{position:static}
+      .page-title{font-size:24px}
+    }
+    @media (max-width:700px){
+      .page{padding:12px}
+      .side,.main{border-radius:18px}
+      .content-block h2{font-size:22px}
+      .image-grid{grid-template-columns:1fr}
+      .embed-shell iframe{min-height:260px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="shell">
+      <aside class="side">
+        <nav class="breadcrumbs">
+          <a href="index.html">Главная</a>
+          <span>/</span>
+          <a href="index.html">Сотрудники</a>
+          <span>/</span>
+          <span>Видеоинструкции</span>
+        </nav>
+        <h1 class="page-title">Видеоинструкции</h1>
+        <p class="page-intro">Ниже собраны видеоматериалы, инструкции и дополнительные файлы.</p>
+        <div class="actions">
+          <a class="mini-btn" href="index.html">← Назад</a>
+          <a class="mini-btn" href="index.html">⌂ На главную</a>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="content-stack">
+          
+        <section class="content-block">
+          <div class="block-header">
+            <div>
+              <div class="block-index">Блок 1</div>
+              <h2>Открытие дня на ПВЗ</h2>
+            </div>
+          </div>
+
+          <div class="video-caption">Видео</div>
+          <div class="video-shell embed-shell"><iframe
+        width="720"
+        height="405"
+        src="https://rutube.ru/play/embed/fdab5fdae4b5bf85250882838c4c57d5/?p=UT5sx9fwg2z3L0eyorslSQ"
+        style="border: none;"
+        allow="clipboard-write; autoplay"
+        allowFullScreen
+      ></iframe></div>
+
+          <div class="instruction-box">
+            📋 Инструкция: Открытие дня на ПВЗ<br>1. Открытие точки<br>1.	Подойти к ПВЗ <br>2.	Снять сигнализацию <br>3.	Открыть дверь <br>4.	Зайти внутрь <br>________________________________________<br>2. Подготовка к работе<br>1.	Переодеться <br>2.	Включить компьютер <br>3.	Подготовить рабочее место <br>📌 Обычно при открытии:<br>•	уже есть ночная приёмка (много коробок) <br>________________________________________<br>3. Подготовка зоны приёмки<br>👉 Важно:<br>•	рабочий стол должен быть чистым <br>•	без посторонних предметов <br>________________________________________<br>4. Начало приёмки<br>1.	Открыть режим: <br>o	«Приёмка» <br>2.	Открыть коробку <br>3.	Выложить товары на стол <br>📌 Рекомендуется:<br>•	выкладывать на стол, а не работать из коробки <br>________________________________________<br>5. Процесс сканирования<br>1.	Берём товар <br>2.	Сканируем штрих-код <br>3.	Система: <br>o	показывает ячейку хранения <br>4.	Маркером: <br>o	пишем номер ячейки на товаре <br>📌 Работать до появления:<br>•	номера ячейки на экране <br>________________________________________<br>6. Работа в команде<br>Если 2 человека:<br>•	1-й: <br>o	сканирует <br>•	2-й: <br>o	сразу раскладывает по ячейкам <br>📌 Особенно актуально:<br>•	при большом потоке (несколько ПВЗ) <br>________________________________________<br>7. Приоритет приёмки<br>👉 В первую очередь принимаем:<br>•	габаритные товары <br>•	тяжёлые коробки <br>📌 Причина:<br>•	освобождаем пространство <br>•	уменьшаем хаос <br>________________________________________<br>8. Работа с курьером<br>При приёмке:<br>•	просить курьера: <br>o	ставить товар штрих-кодом вверх <br>📌 Это ускоряет работу<br>________________________________________<br>9. Выявление брака при приёмке<br>Если товар повреждён:<br>1.	Сканируем: <br>o	сначала код брака <br>2.	Затем: <br>o	сканируем товар <br>📌 Важно:<br>•	зафиксировать до выдачи клиенту <br>•	камера должна это записать <br>________________________________________<br>10. Излишки (чужие товары)<br>Если при сканировании:<br>•	система показывает «излишек» <br>👉 Действие:<br>1.	Добавить в коробку возврата <br>2.	Отправить обратно <br>📌 Переупаковка:<br>•	не требуется (по старому процессу) <br>•	сейчас может обновляться <br>________________________________________<br>11. Ошибки при приёмке<br>Частые ошибки:<br>1.	❌ Сканируют не тот штрих-код <br>2.	❌ Путают ячейки (например: 339 → 239) <br>3.	❌ Берут возвратную коробку как новую поставку <br>4.	❌ Работают в спешке <br>📌 Важно:<br>•	система ошибки не пропустит <br>•	но человеческий фактор остаётся <br>________________________________________<br>12. Работа с возвратными коробками<br>⚠️ Важно:<br>•	не путать: <br>o	поставку <br>o	возврат <br>📌 Ошибка:<br>•	вскрыли возвратную коробку<br>→ товар снова попадёт в приёмку <br>________________________________________<br>13. Нестандартные ситуации<br>Ситуация:<br>•	товар числится выданным клиенту <br>•	но физически лежит на ПВЗ <br>👉 Действие:<br>•	временно разместить отдельно <br>•	дождаться клиента <br>📌 Часто бывает у новичков <br>________________________________________<br>14. Завершение приёмки<br>•	все товары: <br>o	отсканированы <br>o	разложены по ячейкам <br>•	зона: <br>o	приведена в порядок<br><br><br>Открытие дня<br><br>№	Шаг	Действие	Детали	Ответственный<br>1	Открытие	Открыть ПВЗ	Сигналка, дверь	Сотрудник<br>2	Подготовка	Переодеться	Включить ПК	Сотрудник<br>3	Зона	Подготовить стол	Чистое место	Сотрудник<br>4	Приёмка	Открыть режим	В системе	Сотрудник<br>5	Разгрузка	Открыть коробки	Выложить товар	Сотрудник<br>6	Сканирование	Сканировать товар	Получить ячейку	Сотрудник<br>7	Маркировка	Подписать ячейку	Маркером	Сотрудник<br>8	Приоритет	Обработать габарит	В первую очередь	Сотрудник<br>9	Брак	Зафиксировать дефект	До приёмки	Сотрудник<br>10	Излишки	Выявить чужие товары	Система покажет	Сотрудник<br>11	Ошибки	Контроль	Ячейки / коробки	Сотрудник<br>12	Завершение	Разложить товар	По ячейкам	Сотрудник<br><br>📌 Коротко (чек-лист)<br>•	Открыл ПВЗ <br>•	Включил систему <br>•	Подготовил стол <br>•	Начал приёмку <br>•	Сканировал товары <br>•	Подписал ячейки <br>•	Проверил брак <br>•	Разложил по местам <br>________________________________________<br>⚠️ Критические ошибки<br>•	❌ Путать возвраты и поставки <br>•	❌ Не фиксировать брак <br>•	❌ Путать ячейки <br>•	❌ Работать в хаосе <br>•	❌ Не проверять излишки <br>________________________________________<br>💡 Ключевое правило<br>👉 Приёмка = база всей работы ПВЗ<br>Ошибся здесь → ошибки пойдут во всех процессах дальше<br><br>
+          </div>
+
+          
+          
+        <div class="media-section">
+          <div class="section-mini-title">Файлы PDF</div>
+          <div class="pdf-list">
+            
+              <a class="pdf-link" href="https://disk.yandex.ru/i/P4xE6ejqhxVq2w" target="_blank" rel="noopener">PDF 1</a>
+          </div>
+        </div>
+        </section>
+        <section class="content-block">
+          <div class="block-header">
+            <div>
+              <div class="block-index">Блок 2</div>
+              <h2>Работа с браком</h2>
+            </div>
+          </div>
+
+          <div class="video-caption">Видео</div>
+          <div class="video-shell embed-shell"><iframe
+        width="720"
+        height="405"
+        src="https://rutube.ru/play/embed/d869ce9153483c54926f18ceb1149206/?p=9ZP2MHOlVafQvnzws0BTGw"
+        style="border: none;"
+        allow="clipboard-write; autoplay"
+        allowFullScreen
+      ></iframe></div>
+
+          <div class="instruction-box">
+            📋 Инструкция: Работа с браком (WB, ПВЗ)<br>1. Общий принцип<br>👉 Главное правило:<br>Любой дефект → сразу ставим “Брак”<br>📌 Почему это критично:<br>•	если НЕ отметить брак → будет удержание <br>•	если отметить → можно оспорить через камеры <br>________________________________________<br>2. Осмотр товара (одежда)<br>При проверке (пример — куртка):<br>Проверяем:<br>•	чистоту (грязь, пятна) <br>•	подмышки (часто дефекты) <br>•	карманы <br>•	фурнитуру <br>•	замки (обязательно проверить работу) <br>📌 Важно:<br>•	белые вещи проверять особенно тщательно (пятна видны лучше) <br>________________________________________<br>3. Осмотр обуви<br>Проверяем:<br>•	левый и правый ботинок <br>•	одинаковый размер <br>•	внешний вид: <br>o	грязь <br>o	царапины <br>o	клей <br>•	соответствие карточке товара <br>📌 Если есть клей / дефекты → сразу брак<br>________________________________________<br>4. Осмотр товара после примерки<br>Ситуация:<br>•	клиент мерил <br>•	сломал / повредил (например, заклёпку) <br>👉 Это:<br>•	ответственность клиента <br>________________________________________<br>5. Товары, которые нельзя вскрывать<br>Нельзя вскрывать:<br>•	духи <br>•	косметику <br>•	наушники <br>•	товары в заводской упаковке <br>📌 Исключение:<br>•	только по специальной заявке <br>________________________________________<br>6. Подмена (самый критичный риск)<br>Подмена = самый опасный случай<br>📌 Если не отметить:<br>•	удержат полную стоимость товара <br>Признаки:<br>•	товар не соответствует карточке <br>•	другая модель / цвет / материал <br>👉 Действие:<br>•	сразу ставим брак <br>________________________________________<br>7. Просрочка проверки (ошибка)<br>Ситуация:<br>•	товар лежал 14 дней без проверки <br>👉 Риск:<br>•	склад выставит удержание <br>•	ответственность на сотруднике <br>📌 Вывод:<br>•	проверка должна быть своевременной <br>________________________________________<br>8. Как поставить брак (процесс)<br>Шаги:<br>1.	Открыть: <br>o	«Вернуть товар» <br>2.	Выбрать: <br>o	«Да, вернуть» <br>3.	Сканировать стикер <br>4.	Выбрать причину: <br>o	некачественная фурнитура <br>o	повреждение <br>o	грязь <br>o	клей <br>o	дефекты ткани <br>________________________________________<br>9. Фотофиксация брака<br>Обязательно сделать фото:<br>•	товар спереди <br>•	товар сзади <br>•	сам дефект <br>•	штрих-код (стикер) <br>📌 Если дефектов много:<br>•	всё описываем в комментарии <br>________________________________________<br>10. Комментарий<br>Обязательно написать:<br>Пример:<br>•	клей <br>•	царапины <br>•	грязь <br>📌 Даже если фото ограничены — текст обязателен<br>________________________________________<br>11. Завершение оформления<br>1.	Отправить брак в системе <br>2.	Товар: <br>o	НЕ перепаковывается <br>o	уходит в том же виде <br>📌 Это принципиально важно <br><br>Работа с браком WB<br><br>№	Шаг	Действие	Детали	Ответственный<br>1	Осмотр	Проверить товар	Внешний вид, дефекты	Сотрудник<br>2	Оценка	Определить проблему	Грязь / клей / подмена	Сотрудник<br>3	Решение	Принять решение	Брак или нет	Сотрудник<br>4	Открытие	Перейти в возврат	«Вернуть товар»	Сотрудник<br>5	Сканирование	Сканировать стикер	Обязательный шаг	Сотрудник<br>6	Причина	Выбрать причину	Тип дефекта	Сотрудник<br>7	Фото	Сделать фото	3–4 фото	Сотрудник<br>8	Комментарий	Описать дефект	Все проблемы	Сотрудник<br>9	Отправка	Зафиксировать брак	В системе	Сотрудник<br>10	Завершение	Отложить товар	Без перепаковки	Сотрудник<br><br><br><br><br><br><br><br><br><br><br><br><br>📌 Коротко (чек-лист)<br>•	Осмотрел товар <br>•	Нашёл дефект <br>•	Поставил брак <br>•	Сделал фото <br>•	Написал комментарий <br>•	Отправил <br>•	НЕ перепаковывал <br>________________________________________<br>⚠️ Критические ошибки<br>•	❌ Не поставить брак → удержание <br>•	❌ Пропустить подмену → полная стоимость <br>•	❌ Не проверить товар вовремя <br>•	❌ Не сделать фото <br>•	❌ Перепаковать брак<br><br>
+          </div>
+
+          
+          
+        <div class="media-section">
+          <div class="section-mini-title">Файлы PDF</div>
+          <div class="pdf-list">
+            
+              <a class="pdf-link" href="https://disk.yandex.ru/i/vv3h3qV_1ZgoWA" target="_blank" rel="noopener">PDF 1</a>
+          </div>
+        </div>
+        </section>
+        <section class="content-block">
+          <div class="block-header">
+            <div>
+              <div class="block-index">Блок 3</div>
+              <h2>Работа с подменой</h2>
+            </div>
+          </div>
+
+          <div class="video-caption">Видео</div>
+          <div class="video-shell embed-shell"><iframe
+        width="720"
+        height="405"
+        src="https://rutube.ru/play/embed/b631387f89f3d136c8e07399b931f158/?p=F6XBbhKkSUlcxsdg_fMIVw"
+        style="border: none;"
+        allow="clipboard-write; autoplay"
+        allowFullScreen
+      ></iframe></div>
+
+          <div class="instruction-box">
+            📋 Инструкция: Работа с подменой (WB, ПВЗ)<br>1. Что такое подмена<br>👉 Подмена — это когда:<br>•	товар не соответствует карточке <br>Примеры:<br>•	другая модель <br>•	другой цвет <br>•	другой материал <br>•	вообще другой товар <br>📌 Даже небольшое отличие = подмена <br>________________________________________<br>2. Главный риск<br>👉 Подмена = максимальное удержание<br>•	если НЕ отметить →<br>❌ списывается полная стоимость товара <br>________________________________________<br>3. Как выявлять подмену<br>При проверке товара:<br>Сравниваем с карточкой:<br>•	модель <br>•	цвет <br>•	размер <br>•	материал <br>•	внешний вид <br>📌 Пример:<br>•	должны быть кожаные → пришли другие<br>→ это подмена <br>________________________________________<br>4. Действие при обнаружении<br>👉 СРАЗУ:<br>1.	Отмечаем в системе: <br>o	«Брак» (отдельной графы “подмена” нет) <br>2.	Фиксируем: <br>o	как дефект <br>________________________________________<br>5. Фотофиксация<br>Обязательно сделать фото:<br>•	товар полностью <br>•	несоответствие карточке <br>•	детали (где видно отличие) <br>📌 Лучше:<br>•	показать, что товар вообще другой <br>________________________________________<br>6. Важный момент (реальность работы)<br>Даже если:<br>•	всё сделали правильно <br>•	отметили брак <br>•	сделали фото <br>👉 WB может:<br>•	прислать удержание <br>•	запросить видео <br>📌 Это нормальная практика <br>________________________________________<br>7. Как защищаться<br>Чтобы оспорить:<br>1.	Должно быть: <br>o	фото в системе <br>o	отметка брака <br>o	фиксация под камерой <br>2.	Тогда: <br>o	управляющий может оспорить <br>o	удержание снимается <br>________________________________________<br><br>8. Где хранятся доказательства<br>📌 Важно:<br>•	фото НЕ хранятся в телефоне <br>•	всё хранится: <br>o	внутри системы <br>Работа с подменой<br><br>№	Шаг	Действие	Детали	Ответственный<br>1	Осмотр	Проверить товар	Сравнить с карточкой	Сотрудник<br>2	Выявление	Найти несоответствие	Любое отличие	Сотрудник<br>3	Решение	Определить подмену	Да / нет	Сотрудник<br>4	Фиксация	Отметить как брак	В системе	Сотрудник<br>5	Фото	Сделать фото	Несоответствие	Сотрудник<br>6	Комментарий	Описать проблему	Что именно не так	Сотрудник<br>7	Отправка	Зафиксировать	В системе	Сотрудник<br>8	Контроль	Ожидать проверку	Возможен запрос видео	Управляющий<br><br>📌 Коротко (чек-лист)<br>•	Сравнил с карточкой <br>•	Увидел отличие <br>•	Поставил брак <br>•	Сделал фото <br>•	Описал <br>•	Отправил <br>________________________________________<br>⚠️ Критические ошибки<br>•	❌ Не заметить подмену <br>•	❌ Не отметить брак <br>•	❌ Не сделать фото <br>•	❌ “Просто вернуть” без фиксации <br>________________________________________<br>💡 Ключевое правило<br>👉 Подмена = всегда фиксируем как брак<br><br>
+          </div>
+
+          
+          
+        <div class="media-section">
+          <div class="section-mini-title">Файлы PDF</div>
+          <div class="pdf-list">
+            
+              <a class="pdf-link" href="https://disk.yandex.ru/i/JaEr551e5N54hA" target="_blank" rel="noopener">PDF 1</a>
+          </div>
+        </div>
+        </section>
+        <section class="content-block">
+          <div class="block-header">
+            <div>
+              <div class="block-index">Блок 4</div>
+              <h2>Возвраты</h2>
+            </div>
+          </div>
+
+          <div class="video-caption">Видео</div>
+          <div class="video-shell embed-shell"><iframe
+        width="720"
+        height="405"
+        src="https://rutube.ru/play/embed/5621c9e05ec615c291ff7f994db302c9/?p=WQQCX-4unNnCCGF8XLWutQ"
+        style="border: none;"
+        allow="clipboard-write; autoplay"
+        allowFullScreen
+      ></iframe></div>
+
+          <div class="instruction-box">
+            📋 Инструкция: Возвраты WB (ПВЗ)<br>1. Общий принцип<br>👉 Каждый день появляются возвраты:<br>•	товары, которые клиент не забрал за 14 дней <br>📌 Важно:<br>•	обработка должна быть ежедневно утром <br>•	иначе → риск удержаний <br>________________________________________<br>2. Ежедневная работа с возвратами<br>Каждое утро:<br>1.	Заходим в раздел: <br>o	«Возвраты» <br>2.	По каждому возврату: <br>o	смотрим ячейку <br>o	записываем: <br>	номер ячейки <br>	последние цифры ШК <br>📌 Делается вручную (на листочек) — чтобы не запутаться<br>________________________________________<br>3. Поиск товара на складе<br>1.	Идём на склад <br>2.	По записанным данным: <br>o	находим ячейку <br>o	сверяем товар <br>________________________________________<br>4. Обязательная проверка товара<br>👉 КЛЮЧЕВОЕ ПРАВИЛО:<br>Каждый возврат проверяется перед отправкой<br>Даже если:<br>•	товар лежал 14 дней <br>•	никто его не трогал <br>📌 Почему:<br>•	склад может выставить: <br>o	брак <br>o	подмену<br>→ удержание будет на ПВЗ <br>________________________________________<br>5. Как проверять возврат<br>Проверка проводится:<br>•	под камерой <br>Проверяем:<br>•	соответствие карточке товара <br>•	размер <br>•	цвет <br>•	модель <br>•	состояние: <br>o	грязь <br>o	дефекты <br>________________________________________<br>6. Исключение — заводская упаковка<br>👉 НЕ вскрываем:<br>•	товары в заводской упаковке <br>📌 Все остальные:<br>•	вскрываются обязательно <br>________________________________________<br>7. Подмена и брак<br>Если выявлено:<br>Подмена:<br>•	товар не соответствует карточке <br>Брак:<br>•	дефекты, повреждения <br>👉 Действие:<br>•	фиксируем под камерой <br>•	оформляем как брак <br>________________________________________<br>8. Первый этап — сбор товаров<br>1.	Все проверенные товары: <br>o	складываются во временную коробку <br>2.	Это: <br>o	буфер (чтобы не запутаться) <br>📌 Рекомендуется разделять:<br>•	проверка <br>•	переупаковка <br>________________________________________<br>9. Второй этап — переупаковка<br>Для каждого товара:<br>1.	Сканируем <br>2.	Система предлагает: <br>o	тип пакета <br>Типы пакетов:<br>•	маленький <br>•	средний <br>•	большой <br>📌 Важно:<br>•	использовать правильный размер <br>•	ошибка → штраф ~2500 ₽ <br>________________________________________<br>10. Работа со стикерами<br>Есть 2 типа:<br>1. Стикер товара<br>•	клеится на пакет <br>2. Стикер коробки (VT)<br>•	используется для отправки возвратов <br>📌 Отличие:<br>•	VT = возврат <br>________________________________________<br>11. Создание коробки<br>1.	В системе: <br>o	«Создать коробку» <br>2.	Сканируем: <br>o	стикер коробки (VT) <br>3.	Клеим: <br>o	на коробку <br>📌 Важно:<br>•	клеить ниже → чтобы не заклеили скотчем <br>•	лишние штрих-коды зачеркивать <br>________________________________________<br>12. Заполнение коробки<br>1.	Складываем товары в коробку <br>2.	После заполнения: <br>o	закрываем коробку в системе <br>o	физически заклеиваем <br>________________________________________<br>13. Завершение<br>•	коробка готова <br>•	передаётся курьеру <br><br><br><br><br><br><br><br><br><br><br><br><br>Возвраты WB<br><br>№	Шаг	Действие	Детали	Ответственный<br>1	Утро	Открыть возвраты	Ежедневно	Сотрудник<br>2	Запись	Записать данные	Ячейка + ШК	Сотрудник<br>3	Поиск	Найти товар	На складе	Сотрудник<br>4	Проверка	Проверить товар	Под камерой	Сотрудник<br>5	Оценка	Определить дефекты	Брак / подмена	Сотрудник<br>6	Решение	Зафиксировать проблему	Через систему	Сотрудник<br>7	Сбор	Сложить в буфер	Временная коробка	Сотрудник<br>8	Переупаковка	Упаковать товар	По размеру	Сотрудник<br>9	Стикер товара	Наклеить	На пакет	Сотрудник<br>10	Создание коробки	Сканировать VT	Коробка возврата	Сотрудник<br>11	Стикер коробки	Наклеить	Правильно разместить	Сотрудник<br>12	Заполнение	Сложить товары	В коробку	Сотрудник<br>13	Закрытие	Закрыть коробку	В системе + физически	Сотрудник<br>14	Отправка	Передать курьеру	На склад	Сотрудник<br><br>
+          </div>
+
+          
+          
+        <div class="media-section">
+          <div class="section-mini-title">Файлы PDF</div>
+          <div class="pdf-list">
+            
+              <a class="pdf-link" href="https://disk.yandex.ru/i/lNa4F4jll0_56w" target="_blank" rel="noopener">PDF 1</a>
+          </div>
+        </div>
+        </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="image-modal" id="imageModal" onclick="if(event.target===this) closeImageModal()">
+    <div class="image-modal-box">
+      <button class="image-close" type="button" onclick="closeImageModal()">×</button>
+      <img id="modalImage" alt="Увеличенное изображение" />
+    </div>
+  </div>
+
+  <script>
+    function openImageModal(src){
+      document.getElementById('modalImage').src = src;
+      document.getElementById('imageModal').classList.add('is-open');
+      document.body.classList.add('modal-open');
+    }
+    function closeImageModal(){
+      document.getElementById('imageModal').classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeImageModal();
+    });
+  </script>
+</body>
+</html>
